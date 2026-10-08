@@ -42,20 +42,20 @@
     };
 
     behaviors {
-        // エンコーダー (LiTom と同じ動作)
-        //   左: 音量 (時計回りで音量アップ)
-        //   右: スクロール (時計回りで下スクロール)
+        // エンコーダー
+        //   左: 音量 / 右: 縦スクロール
+        //   回転の向きは実機で確認して LiTom の設定から反転済み。
         vol_up_down: behavior_sensor_rotate_volume_up_down {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
-            bindings = <&kp C_VOLUME_UP>, <&kp C_VOLUME_DOWN>;
+            bindings = <&kp C_VOLUME_DOWN>, <&kp C_VOLUME_UP>;
             tap-ms = <20>;
         };
 
         scroll_up_down: behavior_sensor_rotate_mouse_wheel_up_down {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
-            bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
+            bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
             tap-ms = <20>;
         };
     };
