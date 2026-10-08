@@ -49,17 +49,65 @@
     };
 };
 
+/ {
+    // LiTom と同じスパイク除去フィルタ。センサーが省電力から復帰した直後に
+    // 届く壊れた移動量 (最大 1500 超、符号ばらばら) を捨てる。
+    // スケーリングより前 (生のカウントのまま) に置くこと。
+    spike_filter: spike_filter {
+        compatible = "side48,input-processor-spike-filter";
+        #input-processor-cells = <0>;
+        type = <INPUT_EV_REL>;
+        codes = <INPUT_REL_X INPUT_REL_Y>;
+        max-delta = <600>;
+        suppress-ms = <250>;
+    };
+
+    // 慣性スクロール (iOS風): 玉を弾いて離すとスクロールが減衰しながら続く。
+    // 値は LiTom_R.overlay と同一 (センサー送信間隔 16ms 前提)。
+    // 慣性出力は下流のプロセッサをバイパスするため、scale / scale-div は
+    // 下流の &zip_scroll_scaler の引数 (1 / 13) と一致させること。
+    scroll_inertia: scroll_inertia {
+        compatible = "zmk,input-processor-scroll-inertia";
+        #input-processor-cells = <0>;
+        axis = <0>;           // 縦横フリー
+        layer = <4>;          // スクロールレイヤー (T 長押し)
+        scale = <1>;
+        scale-div = <13>;
+        tick = <16>;
+        stop = <2>;
+        release = <48>;
+        decay-fast = <980>;
+        decay-slow = <980>;
+        decay-tail = <980>;
+        peak-decay = <980>;
+        start = <25>;
+        move = <50>;
+        min-events = <4>;
+        friction = <30>;
+        suppress-limit = <25>;
+    };
+};
+
 // Overrides for the input listener node
 &trackball_listener {
     status = "okay";
     device = <&trackball>;
+    // カーソル: LiTom (600cpi x Studio 倍率 1.35) に合わせて 27/20 倍。
+    // &spike_filter は必ず先頭。
+    input-processors =
+            <&spike_filter>,
+            <&zip_xy_scaler 27 20>;
+
+    // レイヤー4 (T 長押し) ではトラックボールをスクロールとして扱う。
+    // 並びは LiTom と同じ: Y反転 -> スクロール化 -> 慣性 -> 1/13 縮小。
     scroller {
-        layers = <2>;
-        input-processors = 
-                <&zip_x_scaler 0 1>,                                //X方向の移動量を0倍にして無効化
-                <&zip_xy_to_scroll_mapper>,                         //スクロールモードに変更
-                <&zip_scroll_scaler 1 15>,                          //移動量1/15
-                <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;   //カーソル移動のY方向を反転する
+        layers = <4>;
+        input-processors =
+                <&spike_filter>,
+                <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>,
+                <&zip_xy_to_scroll_mapper>,
+                <&scroll_inertia>,
+                <&zip_scroll_scaler 1 13>;
     };
 };
 
