@@ -1,0 +1,11 @@
+config SIDE48_INPUT_PROCESSOR_SPIKE_FILTER
+    bool "Drop physically impossible pointer deltas"
+    default y
+    depends on DT_HAS_SIDE48_INPUT_PROCESSOR_SPIKE_FILTER_ENABLED
+    help
+      The PMW3610 can return garbage motion right after waking from its
+      rest modes: a burst of values near the 12 bit range with randomly
+      alternating signs, which throws the cursor across the screen. Zero
+      out events above the configured threshold, plus everything within a
+      short window after one, so the rest of the burst is swallowed too.
+      Ported from LiTom.

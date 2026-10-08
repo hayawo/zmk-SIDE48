@@ -1,0 +1,3 @@
+zephyr_library()
+
+zephyr_library_sources_ifdef(CONFIG_SIDE48_INPUT_PROCESSOR_SPIKE_FILTER src/input_processor_spike_filter.c)
