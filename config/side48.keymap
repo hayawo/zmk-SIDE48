@@ -8,13 +8,11 @@
 #include <dt-bindings/zmk/pointing.h>
 
 // キー配置は ZEN (hayawo/zen-firmware config/keymap.keymap) に合わせている。
-// 左手は左下から、右手は右下から揃えて配置。SIDE48 に入りきらない
-// ZEN のキーは次のように処理している:
-//   ZEN 左手 最下段の7列目 (Tab) と 下から2段目の7列目 (&lt 3 PRINTSCREEN)
-//     -> 右手 最下段の1列目 (空き) に &lt 3 TAB としてまとめた
-//        (PrintScreen はレイヤー3の左上へ)
-//   ZEN 右手 下から2段目の1列目 (&lt 5 SCROLLLOCK)
-//     -> 省略 (レイヤー5 は B 長押しで呼べる。ScrollLock はレイヤー3/4 にある)
+// 左手は左下から揃えて配置。ZEN 左手の内側 7 列目 (&lt 3 PRINTSCREEN, Tab) は
+// 右手へ移動。右手 BASE は実機のキーキャップどおり:
+//   F W R Y P =  /  K T N S H '  /  G D M J B NUBS  /  BS Enter Tab Home End PrtSc
+//   (T 長押し=L4, H 長押し=L1, B 長押し=L5, PrtSc 長押し=L3)
+// 他のレイヤーの右手は ZEN を右下から揃えて配置。
 // 最上段の 9 個のうち実在するのは右手のマウスボタン 2 個 (上側=左クリック,
 // 下側=右クリック) のみ。それ以外は未使用のため &none。
 //
@@ -60,9 +58,9 @@
             bindings = <
 &none                 &none                 &none                 &none                 &none                 &none                 &mkp MB1              &mkp MB2              &none
 &kp ESC               &kp Q                 &kp L                 &kp U                 &kp COMMA             &kp PERIOD            &kp F                 &kp W                 &kp R                 &kp Y                 &kp P                 &kp EQUAL
-&kp LEFT_CONTROL      &kp E                 &kp I                 &kp A                 &kp O                 &kp MINUS             &kp K                 &lt 4 T               &kp N                 &kp S                 &lt 1 H               &kp ENTER
+&kp LEFT_CONTROL      &kp E                 &kp I                 &kp A                 &kp O                 &kp MINUS             &kp K                 &lt 4 T               &kp N                 &kp S                 &lt 1 H               &kp SQT
 &kp LSHFT             &kp Z                 &kp X                 &kp C                 &kp V                 &kp SEMICOLON         &kp G                 &kp D                 &kp M                 &kp J                 &lt 5 B               &kp NON_US_BACKSLASH
-&kp GRAVE             &kp LEFT_WIN          &kp SLASH             &kp LEFT_ALT          &kp SPACE             &mo 2                 &lt 3 TAB             &kp BACKSPACE         &mo 4                 &kp HOME              &kp END               &kp SQT
+&kp GRAVE             &kp LEFT_WIN          &kp SLASH             &kp LEFT_ALT          &kp SPACE             &mo 2                 &kp BACKSPACE         &kp ENTER             &kp TAB               &kp HOME              &kp END               &lt 3 PRINTSCREEN
             >;
             sensor-bindings = <&scroll_up_down &scroll_up_down>;
         };
