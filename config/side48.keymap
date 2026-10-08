@@ -11,10 +11,11 @@
 // 左手は左下から揃えて配置。ZEN 左手の内側 7 列目 (&lt 3 PRINTSCREEN, Tab) は
 // 右手へ移動。右手 BASE は実機のキーキャップどおり:
 //   F W R Y P =  /  K T N S H '  /  G D M J B NUBS  /  BS Enter Tab Home End PrtSc
-//   (T 長押し=L4, H 長押し=L1, B 長押し=L5, PrtSc 長押し=L3)
+//   (W 長押し=L3, T 長押し=L4, H 長押し=L1, B 長押し=L5, PrtSc 長押し=L3)
 // 他のレイヤーの右手は ZEN を右下から揃えて配置。
 // 最上段の 9 個のうち実在するのは右手のマウスボタン 2 個 (上側=左クリック,
 // 下側=右クリック) のみ。それ以外は未使用のため &none。
+// レイヤー3 では上側=戻る、下側=進む。
 //
 // レイヤー: 0 BASE / 1 MOUSE (H 長押し) / 2 SYMBOL / 3 FUNC_NUM /
 //           4 SCROLL_ARROW (T 長押しでトラックボールがスクロール) / 5 FUNCTION / 6 予備
@@ -41,7 +42,16 @@
     };
 
     behaviors {
-        // エンコーダー: LiTom と同じく時計回りで下スクロール、反時計回りで上。
+        // エンコーダー (LiTom と同じ動作)
+        //   左: 音量 (時計回りで音量アップ)
+        //   右: スクロール (時計回りで下スクロール)
+        vol_up_down: behavior_sensor_rotate_volume_up_down {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&kp C_VOLUME_UP>, <&kp C_VOLUME_DOWN>;
+            tap-ms = <20>;
+        };
+
         scroll_up_down: behavior_sensor_rotate_mouse_wheel_up_down {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
@@ -57,12 +67,12 @@
             display-name = "BASE";
             bindings = <
 &none                 &none                 &none                 &none                 &none                 &none                 &mkp MB1              &mkp MB2              &none
-&kp ESC               &kp Q                 &kp L                 &kp U                 &kp COMMA             &kp PERIOD            &kp F                 &kp W                 &kp R                 &kp Y                 &kp P                 &kp EQUAL
+&kp ESC               &kp Q                 &kp L                 &kp U                 &kp COMMA             &kp PERIOD            &kp F                 &lt 3 W               &kp R                 &kp Y                 &kp P                 &kp EQUAL
 &kp LEFT_CONTROL      &kp E                 &kp I                 &kp A                 &kp O                 &kp MINUS             &kp K                 &lt 4 T               &kp N                 &kp S                 &lt 1 H               &kp SQT
 &kp LSHFT             &kp Z                 &kp X                 &kp C                 &kp V                 &kp SEMICOLON         &kp G                 &kp D                 &kp M                 &kp J                 &lt 5 B               &kp NON_US_BACKSLASH
 &kp GRAVE             &kp LEFT_WIN          &kp SLASH             &kp LEFT_ALT          &kp SPACE             &mo 2                 &kp BACKSPACE         &kp ENTER             &kp TAB               &kp HOME              &kp END               &lt 3 PRINTSCREEN
             >;
-            sensor-bindings = <&scroll_up_down &scroll_up_down>;
+            sensor-bindings = <&vol_up_down &scroll_up_down>;
         };
 
         layer_1 {
@@ -74,7 +84,7 @@
 &trans                 &trans                 &trans                 &trans                 &trans                 &trans                 &kp LC(UP_ARROW)       &mkp MB4               &trans                 &mkp MB5               &trans                 &trans
 &trans                 &trans                 &trans                 &trans                 &trans                 &trans                 &trans                 &trans                 &trans                 &trans                 &trans                 &trans
             >;
-            sensor-bindings = <&scroll_up_down &scroll_up_down>;
+            sensor-bindings = <&vol_up_down &scroll_up_down>;
         };
 
         layer_2 {
@@ -86,19 +96,19 @@
 &trans                 &trans                 &trans                 &trans                 &trans                 &kp QUESTION           &kp TILDE              &kp LEFT_BRACE         &kp RIGHT_BRACE        &kp LEFT_BRACKET       &kp RIGHT_BRACKET      &kp SLASH
 &trans                 &trans                 &trans                 &trans                 &trans                 &trans                 &trans                 &kp DEL                &trans                 &trans                 &trans                 &trans
             >;
-            sensor-bindings = <&scroll_up_down &scroll_up_down>;
+            sensor-bindings = <&vol_up_down &scroll_up_down>;
         };
 
         layer_3 {
             display-name = "FUNC_NUM";
             bindings = <
-&trans           &trans           &trans           &trans           &trans           &trans           &trans           &trans           &trans
+&trans           &trans           &trans           &trans           &trans           &trans           &mkp MB4         &mkp MB5         &trans
 &kp PRINTSCREEN  &kp F1           &kp F2           &kp F3           &kp F4           &kp F5           &bootloader      &kp FSLH         &kp ASTRK        &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9
 &trans           &kp F6           &kp F7           &kp F8           &kp F9           &kp F10          &kp HOME         &trans           &kp MINUS        &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6
 &trans           &kp F11          &kp F12          &out OUT_USB     &out OUT_BLE     &bt BT_NXT       &kp END          &trans           &kp GRAVE        &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3
 &bt BT_SEL 0     &bt BT_SEL 1     &bt BT_SEL 2     &bt BT_SEL 3     &bt BT_SEL 4     &trans           &trans           &trans           &trans           &kp KP_NUMBER_0  &kp DOT          &kp EQUAL
             >;
-            sensor-bindings = <&scroll_up_down &scroll_up_down>;
+            sensor-bindings = <&vol_up_down &scroll_up_down>;
         };
 
         layer_4 {
@@ -110,7 +120,7 @@
 &trans           &trans           &trans           &trans           &trans           &trans           &trans           &kp END          &trans           &kp HOME         &kp UP_ARROW     &kp END
 &trans           &trans           &trans           &trans           &trans           &trans           &trans           &trans           &trans           &kp LEFT_ARROW   &kp DOWN_ARROW   &kp RIGHT_ARROW
             >;
-            sensor-bindings = <&scroll_up_down &scroll_up_down>;
+            sensor-bindings = <&vol_up_down &scroll_up_down>;
         };
 
         layer_5 {
@@ -122,7 +132,7 @@
 &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans
 &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans
             >;
-            sensor-bindings = <&scroll_up_down &scroll_up_down>;
+            sensor-bindings = <&vol_up_down &scroll_up_down>;
         };
 
         layer_6 {
@@ -134,7 +144,7 @@
 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
-            sensor-bindings = <&scroll_up_down &scroll_up_down>;
+            sensor-bindings = <&vol_up_down &scroll_up_down>;
         };
     };
 };
