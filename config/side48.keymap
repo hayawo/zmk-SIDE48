@@ -75,7 +75,7 @@
 &kp ESC           &kp Q         &kp L      &kp U         &kp COMMA  &kp PERIOD       &kp F          &lt 3 W    &kp R  &kp Y     &lt 3 P  &lt 3 EQUAL
 &kp LEFT_CONTROL  &kp E         &kp I      &kp A         &kp O      &kp MINUS        &kp K          &kp T      &kp N  &kp S     &lt 1 H  &kp SQT
 &kp LSHFT         &kp Z         &kp X      &kp C         &kp V      &kp SEMICOLON    &kp G          &kp D      &kp M  &kp J     &lt 5 B  &kp NON_US_BACKSLASH
-&kp GRAVE         &kp LEFT_WIN  &kp SLASH  &kp LEFT_ALT  &kp SPACE  &mo 2            &kp BACKSPACE  &kp ENTER  &to 4  &kp HOME  &kp END  &lt 5 PRINTSCREEN
+&kp GRAVE         &kp LEFT_WIN  &kp SLASH  &kp LEFT_ALT  &kp SPACE  &mo 2            &kp BACKSPACE  &kp ENTER  &mo 4  &kp HOME  &kp END  &lt 5 PRINTSCREEN
             >;
 
             sensor-bindings = <&vol_up_down &scroll_up_down>;
